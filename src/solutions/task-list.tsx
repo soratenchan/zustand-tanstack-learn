@@ -55,7 +55,6 @@ function TaskCard({ task }: { task: Task }) {
         {task.description}
       </p>
       <div className="flex items-center gap-2 mt-3">
-        {/* 学習ポイント 22: ステータス変更でOptimistic Update発火 */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -89,9 +88,6 @@ export function TaskList() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
     useTasks();
 
-  // =====================================================
-  // 学習ポイント 23: Intersection Observer で無限スクロール
-  // =====================================================
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -126,7 +122,7 @@ export function TaskList() {
     );
   }
 
-  const allTasks = data?.pages.flatMap((page) => page.items) ?? [];
+  const allTasks = data?.pages.flatMap((page: any) => page.items) ?? [];
   const totalCount = data?.pages[0]?.totalCount ?? 0;
 
   return (
@@ -135,7 +131,7 @@ export function TaskList() {
         {totalCount}件中 {allTasks.length}件表示
       </p>
       <div className="space-y-3">
-        {allTasks.map((task) => (
+        {allTasks.map((task: Task) => (
           <TaskCard key={task.id} task={task} />
         ))}
       </div>

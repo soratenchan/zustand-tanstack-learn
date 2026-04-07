@@ -4,7 +4,6 @@ import { Task } from "@/types";
 
 // ページネーション付きタスク一覧（Infinite Query用）
 export async function GET(request: NextRequest) {
-  // 学習ポイント: 遅延を入れてローディング状態を確認しやすくする
   await new Promise((r) => setTimeout(r, 500));
 
   const { searchParams } = request.nextUrl;

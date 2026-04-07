@@ -6,7 +6,6 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  // 学習ポイント: たまに失敗させてOptimistic Updateのロールバックを確認
   if (Math.random() < 0.15) {
     await new Promise((r) => setTimeout(r, 1000));
     return NextResponse.json({ error: "サーバーエラー（ランダム）" }, { status: 500 });

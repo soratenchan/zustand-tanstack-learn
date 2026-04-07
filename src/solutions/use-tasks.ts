@@ -18,10 +18,6 @@ type TasksPage = {
   totalCount: number;
 };
 
-// =====================================================
-// 学習ポイント 8: Query Key Factory
-// keyを一元管理することで、invalidation漏れを防ぐ。
-// =====================================================
 export const taskKeys = {
   all: ["tasks"] as const,
   lists: () => [...taskKeys.all, "list"] as const,
@@ -44,14 +40,7 @@ async function fetchTasks(
   return res.json();
 }
 
-// =====================================================
-// 学習ポイント 9: Infinite Query
-// ページネーションではなく無限スクロール向けのクエリ。
-// getNextPageParam で次のページを判定する。
-// =====================================================
 export function useTasks() {
-  // 学習ポイント 10: useShallow でオブジェクト全体の比較を浅い比較に変換
-  // filtersオブジェクトが毎回新しい参照にならないようにする
   const filters = useUIStore(useShallow((state) => state.filters));
 
   return useInfiniteQuery({
@@ -59,21 +48,11 @@ export function useTasks() {
     queryFn: ({ pageParam }) => fetchTasks(pageParam, filters),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-    // 学習ポイント 11: staleTime と gcTime
-    // staleTime: データが「古い」と見なされるまでの時間。
-    //   この間は再フェッチしない（windowフォーカス時含む）。
-    // gcTime: キャッシュからデータが削除されるまでの時間。
-    //   アンマウント後もこの時間はキャッシュに残る。
     staleTime: 30 * 1000, // 30秒
     gcTime: 5 * 60 * 1000, // 5分
   });
 }
 
-// =====================================================
-// 学習ポイント 12: Mutation + Optimistic Update
-// サーバーに送信する前にUIを先に更新する。
-// 失敗したらロールバックする。
-// =====================================================
 export function useUpdateTask() {
   const queryClient = useQueryClient();
   const filters = useUIStore(useShallow((state) => state.filters));
@@ -99,7 +78,6 @@ export function useUpdateTask() {
       return res.json() as Promise<Task>;
     },
 
-    // 学習ポイント 13: onMutate で楽観的更新を行う
     onMutate: async ({ id, updates }) => {
       // 1. 進行中のrefetchをキャンセル（楽観的更新を上書きされないため）
       await queryClient.cancelQueries({ queryKey: taskKeys.list(filters) });
@@ -130,7 +108,6 @@ export function useUpdateTask() {
       return { previousData };
     },
 
-    // 学習ポイント 14: エラー時のロールバック
     onError: (_error, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(taskKeys.list(filters), context.previousData);
@@ -142,17 +119,12 @@ export function useUpdateTask() {
       addNotification("タスクを更新しました", "success");
     },
 
-    // 学習ポイント 15: onSettled で最終的に正確なデータをフェッチ
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: taskKeys.lists() });
     },
   });
 }
 
-// =====================================================
-// 学習ポイント 16: 作成のMutation
-// ZustandのストアとTanStack Queryを連携させる例。
-// =====================================================
 export function useCreateTask() {
   const queryClient = useQueryClient();
   const resetDraft = useTaskDraftStore((state) => state.resetDraft);
@@ -175,9 +147,6 @@ export function useCreateTask() {
     },
 
     onSuccess: () => {
-      // 学習ポイント 17: invalidateQueries
-      // lists() のキーを指定すると、filtersに関係なく
-      // 全てのタスクリストクエリが無効化される（部分一致）
       queryClient.invalidateQueries({ queryKey: taskKeys.lists() });
       resetDraft(); // Zustandのストアをリセット
       addNotification("タスクを作成しました", "success");

@@ -5,11 +5,6 @@ import { useCreateTask } from "@/hooks/use-tasks";
 import { useUsers } from "@/hooks/use-users";
 import { Task } from "@/types";
 
-// =====================================================
-// 学習ポイント 24: Zustand + TanStack Query の連携
-// フォーム状態 → Zustand（クライアントのみの状態）
-// データ送信 → TanStack Query（サーバー状態の管理）
-// =====================================================
 export function TaskForm() {
   const draft = useTaskDraftStore((state) => state.draft);
   const updateDraft = useTaskDraftStore((state) => state.updateDraft);

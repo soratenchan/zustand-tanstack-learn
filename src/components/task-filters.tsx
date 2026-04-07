@@ -2,11 +2,6 @@
 
 import { useUIStore } from "@/stores/ui-store";
 
-// =====================================================
-// 学習ポイント 21: Selector による再レンダリング最適化
-// useUIStore(state => state.X) でXだけを購読する。
-// 他のstateが変わっても、このコンポーネントは再レンダリングされない。
-// =====================================================
 export function TaskFilters() {
   // 個別のselectorで必要なものだけ購読
   const status = useUIStore((state) => state.filters.status);

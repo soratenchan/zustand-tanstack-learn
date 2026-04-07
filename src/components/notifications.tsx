@@ -2,7 +2,6 @@
 
 import { useUIStore } from "@/stores/ui-store";
 
-// 学習ポイント 25: subscribe で自動削除される通知を表示
 export function Notifications() {
   const notifications = useUIStore((state) => state.notifications);
   const removeNotification = useUIStore((state) => state.removeNotification);

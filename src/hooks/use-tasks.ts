@@ -1,5 +1,6 @@
 // Step 6: useTasks を useInfiniteQuery で実装
-// Step 8: useUpdateTask（楽観的更新）と useCreateTask を実装
+// Step 8: useUpdateTask（楽観的更新）を実装
+// Step 9: useCreateTask を実装
 
 "use client";
 

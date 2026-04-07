@@ -1,5 +1,5 @@
-// Step 5: フォーム入力がストアと連動するようになる
-// Step 9: handleSubmit で isValid() チェック → createTask.mutate(draft)
+// このファイルは Step 5（task-draft-store 実装後）でフォーム入力が動くようになる
+// Step 9: handleSubmit の中身を実装する
 
 "use client";
 

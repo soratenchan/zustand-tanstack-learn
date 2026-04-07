@@ -3,12 +3,6 @@ import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { TaskFilters } from "@/types";
 
-// =====================================================
-// 学習ポイント 1: Sliceパターン
-// ストアが大きくなったとき、関心ごとにSliceに分割する。
-// 各sliceは独立したstate + actionを持つ。
-// =====================================================
-
 // --- Filter Slice ---
 type FilterSlice = {
   filters: TaskFilters;
@@ -48,11 +42,6 @@ type NotificationSlice = {
 // --- 統合型 ---
 type UIStore = FilterSlice & UISlice & NotificationSlice;
 
-// =====================================================
-// 学習ポイント 2: Middleware合成
-// devtools → persist → subscribeWithSelector → immer の順で合成
-// 注意: middlewareの順番は重要。外側から適用される。
-// =====================================================
 export const useUIStore = create<UIStore>()(
   devtools(
     persist(
@@ -63,7 +52,6 @@ export const useUIStore = create<UIStore>()(
           setFilter: (key, value) =>
             set(
               (state) => {
-                // 学習ポイント 3: immerがあるのでmutableに書ける
                 state.filters[key] = value;
               },
               false, // replace: false（デフォルト）
@@ -135,7 +123,6 @@ export const useUIStore = create<UIStore>()(
       ),
       {
         name: "ui-store", // localStorage key
-        // 学習ポイント 4: partialize で永続化する項目を選択
         partialize: (state) => ({
           theme: state.theme,
           sidebarOpen: state.sidebarOpen,
@@ -147,11 +134,6 @@ export const useUIStore = create<UIStore>()(
   )
 );
 
-// =====================================================
-// 学習ポイント 5: subscribeWithSelector
-// stateの一部だけを監視してリアクションを実行できる。
-// Reactのコンポーネント外からも使える。
-// =====================================================
 useUIStore.subscribe(
   (state) => state.notifications.length,
   (length, prevLength) => {
