@@ -139,10 +139,8 @@ useUIStore.subscribe(
   (length, prevLength) => {
     if (length > prevLength) {
       // 新しい通知が追加されたら3秒後に自動削除
-      const latest =
-        useUIStore.getState().notifications[
-          useUIStore.getState().notifications.length - 1
-        ];
+      const { notifications } = useUIStore.getState();
+      const latest = notifications[notifications.length - 1];
       if (latest) {
         setTimeout(() => {
           useUIStore.getState().removeNotification(latest.id);

@@ -203,9 +203,8 @@ useUIStore.subscribe(
   (length, prevLength) => {
     if (length > prevLength) {
       // 新しい通知が追加されたとき
-      const latest = useUIStore.getState().notifications[
-        useUIStore.getState().notifications.length - 1
-      ];
+      const { notifications } = useUIStore.getState();
+      const latest = notifications[notifications.length - 1];
       if (latest) {
         setTimeout(() => {
           useUIStore.getState().removeNotification(latest.id);

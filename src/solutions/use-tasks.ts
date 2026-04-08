@@ -34,6 +34,7 @@ async function fetchTasks(
     limit: "10",
     status: filters.status,
     priority: filters.priority,
+    ...(filters.assigneeId && { assigneeId: filters.assigneeId }),
   });
   const res = await fetch(`/api/tasks?${params}`);
   if (!res.ok) throw new Error("Failed to fetch tasks");

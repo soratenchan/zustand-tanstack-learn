@@ -116,7 +116,7 @@ export function TaskList() {
     );
   }
 
-  const allTasks = data?.pages.flatMap((page: any) => page.items) ?? [];
+  const allTasks = data?.pages.flatMap((page) => page.items) ?? [];
   const totalCount = data?.pages[0]?.totalCount ?? 0;
 
   return (

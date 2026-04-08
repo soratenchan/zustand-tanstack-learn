@@ -60,6 +60,7 @@ describe("Exercise 3A: NotificationSlice", () => {
     expect(notifications[0].message).toBe("残す通知");
   });
 
+  // このテストは Step 3 で subscribeWithSelector middleware を追加した後に通過します
   it("subscribeWithSelector: 通知追加後に3秒で自動削除される", async () => {
     vi.useFakeTimers();
 
