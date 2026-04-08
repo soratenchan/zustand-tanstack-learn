@@ -7,10 +7,11 @@ export async function GET(request: NextRequest) {
   await new Promise((r) => setTimeout(r, 500));
 
   const { searchParams } = request.nextUrl;
-  const cursor = parseInt(searchParams.get("cursor") || "0");
-  const limit = parseInt(searchParams.get("limit") || "10");
+  const cursor = parseInt(searchParams.get("cursor") || "0", 10);
+  const limit = parseInt(searchParams.get("limit") || "10", 10);
   const status = searchParams.get("status");
   const priority = searchParams.get("priority");
+  const assigneeId = searchParams.get("assigneeId");
 
   let filtered = [...tasks];
   if (status && status !== "all") {
@@ -18,6 +19,9 @@ export async function GET(request: NextRequest) {
   }
   if (priority && priority !== "all") {
     filtered = filtered.filter((t) => t.priority === priority);
+  }
+  if (assigneeId) {
+    filtered = filtered.filter((t) => t.assigneeId === assigneeId);
   }
 
   // createdAtの降順

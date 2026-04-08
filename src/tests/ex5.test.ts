@@ -13,19 +13,19 @@
 import { describe, it, expect } from "vitest";
 import { useUpdateTask, useCreateTask, useDeleteTask } from "@/hooks/use-tasks";
 
+// Note: useMutation フックは QueryClientProvider 内でレンダリングしないと呼べないため、
+// ここでは「実装が存在するか」を関数の形状で確認するにとどめています。
+// 実際の動作確認（楽観的更新・ロールバック）はブラウザで行ってください（API は 15% の確率でエラーを返します）。
 describe("Exercise 5: Mutations", () => {
   it("useUpdateTask がカスタムフックとして実装されている（React hooksを呼ぶ関数）", () => {
     expect(typeof useUpdateTask).toBe("function");
-    // undefined ではなく実際のフック実装があることを確認
-    // フック内で useMutation 等を呼ぶので、関数の中身がある
-    expect(useUpdateTask.toString()).not.toContain("return undefined");
-    expect(useUpdateTask.toString().length).toBeGreaterThan(50);
+    // ダミー実装（return { mutate: () => {} }）より長い実装があることを確認
+    expect(useUpdateTask.toString()).toContain("useMutation");
   });
 
   it("useCreateTask がカスタムフックとして実装されている", () => {
     expect(typeof useCreateTask).toBe("function");
-    expect(useCreateTask.toString()).not.toContain("return undefined");
-    expect(useCreateTask.toString().length).toBeGreaterThan(50);
+    expect(useCreateTask.toString()).toContain("useMutation");
   });
 
   it("useDeleteTask が参考実装として存在する", () => {

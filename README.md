@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zustand + TanStack Query ハンズオン
 
-## Getting Started
+Zustand と TanStack Query を学ぶためのハンズオンプロジェクトです。
+タスク管理アプリを段階的に完成させながら、両ライブラリの実践的な使い方を習得します。
 
-First, run the development server:
+## セットアップ
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 学習ガイド
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+演習の手順は [`src/exercises/README.md`](./src/exercises/README.md) を参照してください。
 
-## Learn More
+## 主な学習内容
 
-To learn more about Next.js, take a look at the following resources:
+| テーマ | 内容 |
+|---|---|
+| Zustand 基礎 | `create`, `set`, `get` |
+| Zustand middleware | `immer`, `persist`, `devtools`, `subscribeWithSelector` |
+| TanStack Query 基礎 | `useInfiniteQuery`, Query Key Factory |
+| TanStack Query 応用 | `useMutation`, 楽観的更新, ロールバック |
+| 統合 | Zustand × TanStack Query の連携パターン |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## プロジェクト構成
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── stores/          # Zustand ストア（演習ファイル）
+├── hooks/           # TanStack Query カスタムフック（演習ファイル）
+├── components/      # React コンポーネント
+├── app/api/         # モック API（実装済み）
+├── tests/           # Vitest テスト
+├── solutions/       # 模範解答
+└── exercises/       # 演習ガイド (README.md)
+```
 
-## Deploy on Vercel
+## テスト実行
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm test              # 全テスト実行
+npm run test:watch    # ウォッチモード
+npm test -- src/tests/ex1  # 特定のテストのみ
+```
