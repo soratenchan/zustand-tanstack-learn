@@ -31,7 +31,7 @@ export const taskKeys = {
 // --- fetch関数（これは変更しないでください） ---
 async function fetchTasks(
   cursor: number,
-  filters: TaskFilters
+  filters: TaskFilters,
 ): Promise<TasksPage> {
   const params = new URLSearchParams({
     cursor: String(cursor),
@@ -54,7 +54,7 @@ export function useTasks() {
     fetchNextPage: () => {},
     hasNextPage: false,
     isFetchingNextPage: false,
-    isLoading: true,
+    isLoading: false,
     isError: false,
     error: null,
   } as any;

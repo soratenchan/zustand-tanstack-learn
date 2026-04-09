@@ -16,7 +16,10 @@ const initialFilters: TaskFilters = {
 
 type FilterSlice = {
   filters: TaskFilters;
-  setFilter: <K extends keyof TaskFilters>(key: K, value: TaskFilters[K]) => void;
+  setFilter: <K extends keyof TaskFilters>(
+    key: K,
+    value: TaskFilters[K],
+  ) => void;
   resetFilters: () => void;
 };
 
@@ -48,8 +51,11 @@ export type UIStore = FilterSlice & UISlice & NotificationSlice;
 export const useUIStore = create<UIStore>()((set) => ({
   // --- Filter Slice ---
   filters: initialFilters,
-  setFilter: () => {},     // ← Step 2 で実装
-  resetFilters: () => {},  // ← Step 2 で実装
+  setFilter: (key, value) =>
+    set((state) => ({ filters: { ...state.filters, [key]: value } })), // ← Step 2 で実装
+  resetFilters: () => {
+    set({ filters: initialFilters });
+  }, // ← Step 2 で実装
 
   // --- UI Slice（実装済み） ---
   sidebarOpen: true,
@@ -57,10 +63,11 @@ export const useUIStore = create<UIStore>()((set) => ({
   selectedTaskId: null,
   selectTask: (id) => set({ selectedTaskId: id }),
   theme: "light",
-  toggleTheme: () => set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
+  toggleTheme: () =>
+    set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
 
   // --- Notification Slice ---
   notifications: [],
-  addNotification: () => {},     // ← Step 4 で実装
-  removeNotification: () => {},  // ← Step 4 で実装
+  addNotification: () => {}, // ← Step 4 で実装
+  removeNotification: () => {}, // ← Step 4 で実装
 }));

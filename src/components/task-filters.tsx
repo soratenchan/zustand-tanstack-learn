@@ -9,6 +9,13 @@ export function TaskFilters() {
   const setFilter = useUIStore((state) => state.setFilter);
   const resetFilters = useUIStore((state) => state.resetFilters);
 
+  console.log(status, priority);
+
+  const handleResetFilters = () => {
+    console.log("resetFilters");
+    // resetFilters();
+  };
+
   return (
     <div className="flex flex-wrap gap-3 items-center p-4 bg-white rounded-lg shadow-sm border">
       <div className="flex items-center gap-2">
@@ -24,6 +31,8 @@ export function TaskFilters() {
           <option value="done">完了</option>
         </select>
       </div>
+
+      <button onClick={handleResetFilters}>リセット!!!</button>
 
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium text-gray-700">優先度:</label>
@@ -42,10 +51,10 @@ export function TaskFilters() {
       </div>
 
       <button
-        onClick={resetFilters}
+        onClick={handleResetFilters}
         className="text-sm text-blue-600 hover:text-blue-800 underline"
       >
-        リセット
+        リセット!!!
       </button>
     </div>
   );
