@@ -12,8 +12,7 @@ export function TaskFilters() {
   console.log(status, priority);
 
   const handleResetFilters = () => {
-    console.log("resetFilters");
-    // resetFilters();
+    resetFilters();
   };
 
   return (
@@ -31,8 +30,6 @@ export function TaskFilters() {
           <option value="done">完了</option>
         </select>
       </div>
-
-      <button onClick={handleResetFilters}>リセット!!!</button>
 
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium text-gray-700">優先度:</label>
@@ -54,7 +51,7 @@ export function TaskFilters() {
         onClick={handleResetFilters}
         className="text-sm text-blue-600 hover:text-blue-800 underline"
       >
-        リセット!!!
+        リセット!
       </button>
     </div>
   );
