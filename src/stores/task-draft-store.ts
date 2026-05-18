@@ -3,7 +3,10 @@
 import { create } from "zustand";
 import { Task } from "@/types";
 
-type TaskDraft = Pick<Task, "title" | "description" | "priority" | "assigneeId">;
+type TaskDraft = Pick<
+  Task,
+  "title" | "description" | "priority" | "assigneeId"
+>;
 
 type TaskDraftStore = {
   draft: TaskDraft;
@@ -23,7 +26,10 @@ const emptyDraft: TaskDraft = {
 
 export const useTaskDraftStore = create<TaskDraftStore>()((set, get) => ({
   draft: emptyDraft,
-  updateDraft: () => {},  // ← Step 5 で実装
-  resetDraft: () => {},   // ← Step 5 で実装
-  isValid: () => false,   // ← Step 5 で実装
+  updateDraft: (key, value) =>
+    set((state) => ({
+      draft: { ...state.draft, [key]: value },
+    })), // ← Step 5 で実装
+  resetDraft: () => set({ draft: emptyDraft }), // ← Step 5 で実装
+  isValid: () => get().draft.title.trim().length > 0, // ← Step 5 で実装
 }));

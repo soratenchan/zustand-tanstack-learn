@@ -49,6 +49,7 @@ npm run dev
 http://localhost:3000 を開いてください。
 
 **ブラウザで見えるもの:**
+
 - 左にサイドバー（タスク作成フォームとフィルター）
 - メインエリアにローディングスケルトン（5つの灰色パルスアニメーション）が永遠に表示される
 - サイドバーの開閉ボタン（←/→）は動く
@@ -112,30 +113,30 @@ export const useUIStore = create<UIStore>()(
       subscribeWithSelector(
         immer((set) => ({
           // ... 既存の実装をここに移動
-        }))
+        })),
       ),
       {
-        name: "ui-store",  // localStorage のキー名
+        name: "ui-store", // localStorage のキー名
         partialize: (state) => ({
           theme: state.theme,
           sidebarOpen: state.sidebarOpen,
           filters: state.filters,
         }),
-      }
+      },
     ),
-    { name: "UIStore" }  // Redux DevTools での表示名
-  )
+    { name: "UIStore" }, // Redux DevTools での表示名
+  ),
 );
 ```
 
 ### 各 middleware の役割
 
-| middleware | 役割 |
-|---|---|
-| `immer` | `set` の中で `state.filters[key] = value` のようにミュータブルに書ける |
+| middleware              | 役割                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| `immer`                 | `set` の中で `state.filters[key] = value` のようにミュータブルに書ける               |
 | `subscribeWithSelector` | ストアの一部だけを監視する `subscribe(selector, listener)` が使える（Step 4 で使用） |
-| `persist` | localStorage にストアの一部を自動保存・復元する |
-| `devtools` | ブラウザの Redux DevTools でストアの変化を確認できる |
+| `persist`               | localStorage にストアの一部を自動保存・復元する                                      |
+| `devtools`              | ブラウザの Redux DevTools でストアの変化を確認できる                                 |
 
 ### immer を使った setFilter の書き方
 
@@ -201,7 +202,7 @@ removeNotification: (id) => set((state) => {
 ```typescript
 // useUIStore の定義の後に追加する
 useUIStore.subscribe(
-  (state) => state.notifications.length,  // セレクタ: 通知の数だけ監視
+  (state) => state.notifications.length, // セレクタ: 通知の数だけ監視
   (length, prevLength) => {
     if (length > prevLength) {
       // 新しい通知が追加されたとき
@@ -213,7 +214,7 @@ useUIStore.subscribe(
         }, 3000);
       }
     }
-  }
+  },
 );
 ```
 
@@ -282,8 +283,8 @@ export function useTasks() {
     queryFn: ({ pageParam }) => fetchTasks(pageParam, filters),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-    staleTime: 30 * 1000,   // 30秒間はデータを新鮮とみなす
-    gcTime: 5 * 60 * 1000,  // 5分間キャッシュを保持
+    staleTime: 30 * 1000, // 30秒間はデータを新鮮とみなす
+    gcTime: 5 * 60 * 1000, // 5分間キャッシュを保持
   });
 }
 ```
@@ -334,7 +335,7 @@ const loadMoreRef = useCallback(
     });
     observerRef.current.observe(node);
   },
-  [hasNextPage, isFetchingNextPage, fetchNextPage]
+  [hasNextPage, isFetchingNextPage, fetchNextPage],
 );
 ```
 
@@ -368,7 +369,13 @@ export function useUpdateTask() {
   const addNotification = useUIStore((state) => state.addNotification);
 
   return useMutation({
-    mutationFn: async ({ id, updates }: { id: string; updates: Partial<Task> }) => {
+    mutationFn: async ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: Partial<Task>;
+    }) => {
       const res = await fetch(`/api/tasks/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -388,7 +395,7 @@ export function useUpdateTask() {
 
       // 2. 現在のキャッシュを保存（ロールバック用）
       const previousData = queryClient.getQueryData<InfiniteData<TasksPage>>(
-        taskKeys.list(filters)
+        taskKeys.list(filters),
       );
 
       // 3. キャッシュを楽観的に更新
@@ -401,11 +408,11 @@ export function useUpdateTask() {
             pages: old.pages.map((page) => ({
               ...page,
               items: page.items.map((task) =>
-                task.id === id ? { ...task, ...updates } : task
+                task.id === id ? { ...task, ...updates } : task,
               ),
             })),
           };
-        }
+        },
       );
 
       // 4. ロールバック用データを返す
@@ -506,7 +513,7 @@ export function useCreateTask() {
       // lists() キーで invalidate すると、フィルター条件に関係なく
       // 全てのタスクリストクエリが無効化される（部分一致）
       queryClient.invalidateQueries({ queryKey: taskKeys.lists() });
-      resetDraft();  // Zustand のストアをリセット
+      resetDraft(); // Zustand のストアをリセット
       addNotification("タスクを作成しました", "success");
     },
     onError: () => {
