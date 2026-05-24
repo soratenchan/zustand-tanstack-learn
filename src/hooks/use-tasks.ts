@@ -48,16 +48,16 @@ async function fetchTasks(
 // --- Step 6 で実装してください ---
 // useInfiniteQuery を使ってタスク一覧を取得する
 export function useTasks() {
+  const filters = useUIStore(useShallow((state) => state.filters));
   // ダミー実装: Step 6 で useInfiniteQuery に置き換える
-  return {
-    data: undefined,
-    fetchNextPage: () => {},
-    hasNextPage: false,
-    isFetchingNextPage: false,
-    isLoading: false,
-    isError: false,
-    error: null,
-  } as any;
+  return useInfiniteQuery({
+    queryKey: taskKeys.list(filters),
+    queryFn: ({ pageParam }) => fetchTasks(pageParam, filters),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    staleTime: 30 * 1000, // 30秒間はデータを新鮮とみなす
+    gcTime: 5 * 60 * 1000, // 5分間キャッシュを保持
+  });
 }
 
 // --- Step 8 で実装してください ---
